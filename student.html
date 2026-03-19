@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>student portal · muranga university</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f0f7f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1e3a2e;
+    }
+
+    .top-nav {
+      background: #1b4d2e;
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #d4a017;
+      color: white;
+    }
+
+    .logo-area {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: white;
+    }
+
+    .student-info {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .student-name {
+      color: white;
+      font-weight: 400;
+      font-size: 0.95rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+    }
+
+    .logout-btn {
+      background: #d4a017;
+      color: #1b4d2e;
+      border: none;
+      border-radius: 4px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background: #e5b32e;
+    }
+
+    .live-clock {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+      background: rgba(0,0,0,0.2);
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+    }
+
+    .main-layout {
+      display: flex;
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.5rem;
+      gap: 2rem;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: white;
+      border-radius: 8px;
+      padding: 1rem 0;
+      border: 1px solid #c0d6c0;
+      height: fit-content;
+    }
+
+    .sidebar-item {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      color: #2d5a3a;
+      font-size: 0.95rem;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-item:hover {
+      background: #e8f3e8;
+    }
+
+    .sidebar-item.active {
+      background: #e0f0e0;
+      border-left: 3px solid #d4a017;
+      font-weight: 500;
+    }
+
+    .content-area {
+      flex: 1;
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      border: 1px solid #c0d6c0;
+      min-height: 500px;
+    }
+
+    .content-panel {
+      display: none;
+    }
+
+    .content-panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #d4a017;
+      padding-bottom: 0.75rem;
+    }
+
+    .panel-header h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #1b4d2e;
+    }
+
+    .info-grid {
+      display: flex;
+      gap: 2rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #c0d6c0;
+      margin-bottom: 2rem;
+    }
+
+    .info-item {
+      flex: 1;
+    }
+
+    .info-label {
+      font-size: 0.8rem;
+      color: #4a6f5a;
+      margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      color: #1b4d2e;
+      font-weight: 500;
+    }
+
+    .face-status {
+      display: inline-block;
+      padding: 0.2rem 0;
+    }
+
+    .face-status.registered {
+      color: #1b4d2e;
+      font-weight: 600;
+    }
+
+    .face-status.pending {
+      color: #d4a017;
+      font-weight: 600;
+    }
+
+    .units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .unit-card {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: #f5faf5;
+      border-radius: 8px;
+      border: 1px solid #c0d6c0;
+    }
+
+    .unit-info {
+      flex: 1;
+    }
+
+    .unit-code {
+      font-weight: 600;
+      color: #1b4d2e;
+      font-size: 1rem;
+    }
+
+    .unit-name {
+      color: #4a6f5a;
+      font-size: 0.9rem;
+      margin-top: 0.2rem;
+    }
+
+    .unit-progress {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: conic-gradient(#1b4d2e 0deg, #e0f0e0 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-right: 1rem;
+    }
+
+    .unit-progress::before {
+      content: '';
+      position: absolute;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .unit-progress-text {
+      position: relative;
+      z-index: 1;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1b4d2e;
+    }
+
+    .enroll-controls {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1.5rem 0 1rem 0;
+    }
+
+    .unit-select {
+      flex: 1;
+      padding: 0.5rem;
+      background: white;
+      border: 1px solid #1b4d2e;
+      border-radius: 4px;
+      color: #1b4d2e;
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #1b4d2e;
+      color: white;
+      font-weight: 500;
+    }
+
+    .btn:hover {
+      background: #2d6a3a;
+    }
+
+    .btn-secondary {
+      background: #d4a017;
+      color: #1b4d2e;
+    }
+
+    .btn-secondary:hover {
+      background: #e5b32e;
+    }
+
+    .attendance-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .unit-filter {
+      padding: 0.5rem;
+      background: white;
+      border: 1px solid #1b4d2e;
+      border-radius: 4px;
+      color: #1b4d2e;
+      font-size: 0.9rem;
+      min-width: 200px;
+    }
+
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .attendance-table th {
+      text-align: left;
+      padding: 0.75rem 0;
+      color: #1b4d2e;
+      font-weight: 500;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #d4a017;
+    }
+
+    .attendance-table td {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #c0d6c0;
+      font-size: 0.9rem;
+    }
+
+    .present {
+      color: #1b4d2e;
+      font-weight: 600;
+    }
+
+    .absent {
+      color: #b33c1f;
+      font-weight: 600;
+    }
+
+    .not-marked {
+      color: #7a9e7a;
+    }
+
+    .pending-message {
+      text-align: center;
+      padding: 2rem;
+      color: #d4a017;
+      background: #fef9e7;
+      border-radius: 4px;
+      margin: 1rem 0;
+      border: 1px solid #d4a017;
+    }
+
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,40,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .auth-box {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      width: 360px;
+      border-top: 4px solid #d4a017;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #c0d6c0;
+    }
+
+    .auth-tab {
+      padding: 0.5rem 0;
+      border: none;
+      background: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: #4a6f5a;
+      border-bottom: 2px solid transparent;
+    }
+
+    .auth-tab.active {
+      color: #1b4d2e;
+      border-bottom: 2px solid #d4a017;
+      font-weight: 500;
+    }
+
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    .auth-title {
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #1b4d2e;
+    }
+
+    .auth-desc {
+      color: #4a6f5a;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #1b4d2e;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 0.6rem;
+      background: white;
+      border: 1px solid #c0d6c0;
+      border-radius: 4px;
+      color: #1b4d2e;
+      font-size: 0.9rem;
+    }
+
+    .auth-input:focus {
+      outline: none;
+      border-color: #1b4d2e;
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 0.6rem;
+      background: #1b4d2e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .auth-btn:hover {
+      background: #2d6a3a;
+    }
+
+    .auth-error {
+      color: #b33c1f;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .auth-message {
+      color: #d4a017;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .back-to-login {
+      text-align: center;
+      margin-top: 1rem;
+      color: #4a6f5a;
+      font-size: 0.8rem;
+    }
+
+    .back-to-login a {
+      color: #1b4d2e;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <!-- login overlay -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="loginTab">Login</button>
+        <button class="auth-tab" id="registerTab">Register</button>
+      </div>
+
+      <!-- login form -->
+      <div class="auth-form active" id="loginForm">
+        <div class="auth-title">Welcome back</div>
+        <div class="auth-desc">Sign in with your registration number</div>
+        
+        <div class="input-group">
+          <label>Registration Number</label>
+          <input type="text" class="auth-input" id="loginRegNumber" placeholder="e.g. SC200/0459/2022">
+        </div>
+        
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" class="auth-input" id="loginPass" placeholder="••••••••">
+        </div>
+        
+        <button class="auth-btn" id="loginBtn">Sign in</button>
+        <div class="auth-error" id="loginError">Invalid credentials</div>
+        <div class="back-to-login">
+          New student? <a id="gotoRegister">Create account</a>
+        </div>
+      </div>
+
+      <!-- register form -->
+      <div class="auth-form" id="registerForm">
+        <div class="auth-title">Create account</div>
+        <div class="auth-desc">Register as a new student</div>
+        
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" class="auth-input" id="regName" placeholder="Your full name">
+        </div>
+        
+        <div class="input-group">
+          <label>Registration Number</label>
+          <input type="text" class="auth-input" id="regNumber" placeholder="e.g. SC200/0459/2022">
+        </div>
+        
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" class="auth-input" id="regPass" placeholder="Minimum 4 characters">
+        </div>
+        
+        <div class="input-group">
+          <label>Confirm Password</label>
+          <input type="password" class="auth-input" id="regConfirmPass" placeholder="Re-enter password">
+        </div>
+        
+        <button class="auth-btn" id="registerBtn">Register</button>
+        <div class="auth-error" id="registerError"></div>
+        <div class="auth-message" id="registerMessage"></div>
+        <div class="back-to-login">
+          Already have an account? <a id="gotoLogin">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-nav">
+    <div class="logo-area">
+      MURANGA UNIVERSITY
+    </div>
+    <div class="student-info" id="studentInfo" style="display: none;">
+      <span class="student-name" id="displayName"></span>
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+    <div class="live-clock" id="clock"></div>
+  </div>
+
+  <div class="main-layout" id="dashboard" style="display: none;">
+    <div class="sidebar">
+      <div class="sidebar-item active" id="sidebarDashboard">Dashboard</div>
+      <div class="sidebar-item" id="sidebarUnits">My Units</div>
+      <div class="sidebar-item" id="sidebarAttendance">Attendance</div>
+    </div>
+
+    <div class="content-area">
+      <!-- Dashboard Panel -->
+      <div class="content-panel active" id="panelDashboard">
+        <div class="panel-header">
+          <h2>Dashboard</h2>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Name</div>
+            <div class="info-value" id="infoName"></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Registration No.</div>
+            <div class="info-value" id="infoRegNumber"></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Face Status</div>
+            <div class="info-value"><span id="infoFaceStatus" class="face-status">—</span></div>
+          </div>
+        </div>
+
+        <div class="pending-message" id="enrollPrompt" style="display: none;">
+          You are not enrolled in any units. Go to "My Units" to enroll.
+        </div>
+      </div>
+
+      <!-- Units Panel -->
+      <div class="content-panel" id="panelUnits">
+        <div class="panel-header">
+          <h2>My Units</h2>
+        </div>
+        
+        <div class="enroll-controls">
+          <select id="unitSelect" class="unit-select">
+            <option value="">Select a unit to enroll</option>
+          </select>
+          <button class="btn" id="enrollBtn">Enroll</button>
+        </div>
+        
+        <div class="units-list" id="unitsList">
+          <!-- enrolled units will appear here -->
+        </div>
+      </div>
+
+      <!-- Attendance Panel -->
+      <div class="content-panel" id="panelAttendance">
+        <div class="panel-header">
+          <h2>Attendance</h2>
+        </div>
+        
+        <div class="attendance-controls">
+          <select id="attendanceUnitSelect" class="unit-filter">
+            <option value="">Select a unit</option>
+          </select>
+          <div id="unitPercentageDisplay" style="font-weight: 600; color: #1b4d2e;">0%</div>
+        </div>
+        
+        <div id="pendingMessage" style="display: none;" class="pending-message">
+          Face not registered. Please see your teacher.
+        </div>
+        
+        <table class="attendance-table" id="attendanceTable" style="display: none;">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function tickClock() {
+      let d = new Date();
+      let h = String(d.getHours()).padStart(2,'0');
+      let m = String(d.getMinutes()).padStart(2,'0');
+      document.getElementById('clock').innerText = h + ':' + m;
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
+
+    // DOM elements
+    const authOverlay = document.getElementById('authOverlay');
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const dashboard = document.getElementById('dashboard');
+    const studentInfo = document.getElementById('studentInfo');
+    const enrollPrompt = document.getElementById('enrollPrompt');
+    
+    const loginRegNumber = document.getElementById('loginRegNumber');
+    const loginPass = document.getElementById('loginPass');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    
+    const regName = document.getElementById('regName');
+    const regNumber = document.getElementById('regNumber');
+    const regPass = document.getElementById('regPass');
+    const regConfirmPass = document.getElementById('regConfirmPass');
+    const registerBtn = document.getElementById('registerBtn');
+    const registerError = document.getElementById('registerError');
+    const registerMessage = document.getElementById('registerMessage');
+    
+    const sidebarDashboard = document.getElementById('sidebarDashboard');
+    const sidebarUnits = document.getElementById('sidebarUnits');
+    const sidebarAttendance = document.getElementById('sidebarAttendance');
+    const panelDashboard = document.getElementById('panelDashboard');
+    const panelUnits = document.getElementById('panelUnits');
+    const panelAttendance = document.getElementById('panelAttendance');
+    
+    const infoName = document.getElementById('infoName');
+    const infoRegNumber = document.getElementById('infoRegNumber');
+    const infoFaceStatus = document.getElementById('infoFaceStatus');
+    const displayNameSpan = document.getElementById('displayName');
+    const unitPercentageDisplay = document.getElementById('unitPercentageDisplay');
+
+    const gotoRegister = document.getElementById('gotoRegister');
+    const gotoLogin = document.getElementById('gotoLogin');
+
+    let allUnits = [];
+    let enrolledUnits = [];
+    let currentStudentReg = '';
+    let currentStudentName = '';
+
+    // ==================== SIDEBAR NAVIGATION ====================
+    function showPanel(panel) {
+      sidebarDashboard.classList.remove('active');
+      sidebarUnits.classList.remove('active');
+      sidebarAttendance.classList.remove('active');
+      panelDashboard.classList.remove('active');
+      panelUnits.classList.remove('active');
+      panelAttendance.classList.remove('active');
+      
+      if (panel === 'dashboard') {
+        sidebarDashboard.classList.add('active');
+        panelDashboard.classList.add('active');
+      } else if (panel === 'units') {
+        sidebarUnits.classList.add('active');
+        panelUnits.classList.add('active');
+        renderUnitsList();
+      } else if (panel === 'attendance') {
+        sidebarAttendance.classList.add('active');
+        panelAttendance.classList.add('active');
+        if (enrolledUnits.length > 0) {
+          document.getElementById('attendanceUnitSelect').value = enrolledUnits[0].code;
+          loadAttendance();
+        }
+      }
+    }
+
+    sidebarDashboard.addEventListener('click', () => showPanel('dashboard'));
+    sidebarUnits.addEventListener('click', () => showPanel('units'));
+    sidebarAttendance.addEventListener('click', () => showPanel('attendance'));
+
+    // ==================== CHECK SESSION ====================
+    function checkSession() {
+      let loggedInStudent = sessionStorage.getItem('studentLoggedIn');
+      let studentNameSession = sessionStorage.getItem('studentName');
+      let studentRegSession = sessionStorage.getItem('studentRegNumber');
+
+      if (loggedInStudent === 'true' && studentNameSession) {
+        currentStudentName = studentNameSession;
+        currentStudentReg = studentRegSession;
+        
+        authOverlay.style.display = 'none';
+        dashboard.style.display = 'flex';
+        studentInfo.style.display = 'flex';
+        displayNameSpan.innerText = currentStudentName;
+        infoName.innerText = currentStudentName;
+        infoRegNumber.innerText = currentStudentReg || '—';
+        
+        loadAllData();
+        return true;
+      }
+      return false;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const registerParam = urlParams.get('register');
+
+    if (!checkSession()) {
+      authOverlay.style.display = 'flex';
+      
+      if (registerParam === 'true') {
+        loginTab.classList.remove('active');
+        registerTab.classList.add('active');
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+      } else {
+        loginTab.classList.add('active');
+        registerTab.classList.remove('active');
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+      }
+    }
+
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('active');
+      registerTab.classList.remove('active');
+      loginForm.classList.add('active');
+      registerForm.classList.remove('active');
+      registerError.style.display = 'none';
+      registerMessage.style.display = 'none';
+    });
+
+    registerTab.addEventListener('click', () => {
+      registerTab.classList.add('active');
+      loginTab.classList.remove('active');
+      registerForm.classList.add('active');
+      loginForm.classList.remove('active');
+      loginError.style.display = 'none';
+    });
+
+    gotoRegister?.addEventListener('click', (e) => {
+      e.preventDefault();
+      registerTab.click();
+    });
+
+    gotoLogin?.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginTab.click();
+    });
+
+    document.getElementById('logoutBtn').onclick = () => {
+      sessionStorage.removeItem('studentLoggedIn');
+      sessionStorage.removeItem('studentName');
+      sessionStorage.removeItem('studentRegNumber');
+      window.location.href = 'login.html';
+    };
+
+    // ==================== REGISTER ====================
+    registerBtn.addEventListener('click', async () => {
+      let name = regName.value.trim();
+      let regNum = regNumber.value.trim();
+      let pass = regPass.value.trim();
+      let confirm = regConfirmPass.value.trim();
+
+      registerError.style.display = 'none';
+      registerMessage.style.display = 'none';
+
+      if (!name || name.length < 2) {
+        registerError.innerText = 'Name must be at least 2 characters';
+        registerError.style.display = 'block';
+        return;
+      }
+
+      if (!regNum) {
+        registerError.innerText = 'Registration number is required';
+        registerError.style.display = 'block';
+        return;
+      }
+
+      if (!pass || pass.length < 4) {
+        registerError.innerText = 'Password must be at least 4 characters';
+        registerError.style.display = 'block';
+        return;
+      }
+
+      if (pass !== confirm) {
+        registerError.innerText = 'Passwords do not match';
+        registerError.style.display = 'block';
+        return;
+      }
+
+      try {
+        let response = await fetch('http://localhost:3000/api/student/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, regNumber: regNum, password: pass })
+        });
+
+        let data = await response.json();
+
+        if (data.success) {
+          registerMessage.innerText = 'Registration successful! You can now login.';
+          registerMessage.style.display = 'block';
+          regName.value = '';
+          regNumber.value = '';
+          regPass.value = '';
+          regConfirmPass.value = '';
+          
+          setTimeout(() => {
+            loginTab.click();
+          }, 2000);
+        } else {
+          registerError.innerText = data.message;
+          registerError.style.display = 'block';
+        }
+      } catch (err) {
+        registerError.innerText = 'Error connecting to server';
+        registerError.style.display = 'block';
+      }
+    });
+
+    // ==================== LOGIN ====================
+    loginBtn.addEventListener('click', async () => {
+      let regNum = loginRegNumber.value.trim();
+      let pass = loginPass.value.trim();
+
+      loginError.style.display = 'none';
+
+      if (!regNum || !pass) {
+        loginError.innerText = 'Please enter registration number and password';
+        loginError.style.display = 'block';
+        return;
+      }
+
+      try {
+        let response = await fetch('http://localhost:3000/api/student/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ regNumber: regNum, password: pass })
+        });
+
+        let data = await response.json();
+
+        if (data.success) {
+          sessionStorage.setItem('studentLoggedIn', 'true');
+          sessionStorage.setItem('studentName', data.name);
+          sessionStorage.setItem('studentRegNumber', data.regNumber);
+          
+          currentStudentName = data.name;
+          currentStudentReg = data.regNumber;
+          
+          authOverlay.style.display = 'none';
+          dashboard.style.display = 'flex';
+          studentInfo.style.display = 'flex';
+          displayNameSpan.innerText = data.name;
+          infoName.innerText = data.name;
+          infoRegNumber.innerText = data.regNumber;
+          
+          loadAllData();
+        } else {
+          loginError.innerText = data.message || 'Invalid credentials';
+          loginError.style.display = 'block';
+        }
+      } catch (err) {
+        loginError.innerText = 'Error connecting to server';
+        loginError.style.display = 'block';
+      }
+    });
+
+    loginPass.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') loginBtn.click();
+    });
+
+    // ==================== LOAD ALL DATA ====================
+    async function loadAllData() {
+      await loadUnits();
+      await loadEnrolledUnits();
+      await checkFaceRegistration();
+    }
+
+    async function loadUnits() {
+      try {
+        let response = await fetch('http://localhost:3000/api/units');
+        allUnits = await response.json();
+        updateUnitDropdowns();
+      } catch (e) {
+        console.log('error loading units', e);
+      }
+    }
+
+    async function loadEnrolledUnits() {
+      if (!currentStudentReg) return;
+      
+      try {
+        let response = await fetch(`http://localhost:3000/api/student/units/${currentStudentReg}`);
+        enrolledUnits = await response.json();
+        
+        updateUnitDropdowns();
+        renderUnitsList();
+        
+        if (enrolledUnits.length === 0) {
+          enrollPrompt.style.display = 'block';
+        } else {
+          enrollPrompt.style.display = 'none';
+          document.getElementById('attendanceUnitSelect').value = enrolledUnits[0].code;
+        }
+      } catch (e) {
+        console.log('error loading enrolled units', e);
+      }
+    }
+
+    function updateUnitDropdowns() {
+      let enrollOptions = '<option value="">Select a unit to enroll</option>';
+      let attendanceOptions = '<option value="">Select a unit</option>';
+      
+      allUnits.forEach(unit => {
+        let isEnrolled = enrolledUnits.some(e => e.code === unit.code);
+        
+        if (!isEnrolled) {
+          enrollOptions += `<option value="${unit.code}">${unit.code} - ${unit.name}</option>`;
+        }
+        
+        attendanceOptions += `<option value="${unit.code}" ${isEnrolled ? 'selected' : ''}>${unit.code} - ${unit.name}</option>`;
+      });
+      
+      let unitSelect = document.getElementById('unitSelect');
+      let attendanceUnitSelect = document.getElementById('attendanceUnitSelect');
+      if (unitSelect) unitSelect.innerHTML = enrollOptions;
+      if (attendanceUnitSelect) attendanceUnitSelect.innerHTML = attendanceOptions;
+    }
+
+    function calculateUnitPercentage(unitCode) {
+      let unitAttendance = JSON.parse(localStorage.getItem('unitAttendance')) || {};
+      let unitData = unitAttendance[unitCode] || {};
+      let studentWeeks = unitData[currentStudentName] || Array(14).fill(null);
+      let present = studentWeeks.filter(w => w === true).length;
+      return Math.round((present / 14) * 100);
+    }
+
+    function renderUnitsList() {
+      let html = '';
+      
+      if (enrolledUnits.length === 0) {
+        html = '<div style="color: #4a6f5a; padding: 1rem 0; text-align: center;">You are not enrolled in any units</div>';
+      } else {
+        enrolledUnits.forEach(unit => {
+          let percentage = calculateUnitPercentage(unit.code);
+          let degrees = (percentage / 100) * 360;
+          
+          html += `
+            <div class="unit-card">
+              <div class="unit-progress" style="background: conic-gradient(#1b4d2e ${degrees}deg, #e0f0e0 ${degrees}deg);">
+                <span class="unit-progress-text">${percentage}%</span>
+              </div>
+              <div class="unit-info">
+                <div class="unit-code">${unit.code}</div>
+                <div class="unit-name">${unit.name}</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+      
+      document.getElementById('unitsList').innerHTML = html;
+    }
+
+    document.getElementById('enrollBtn').addEventListener('click', async () => {
+      let unitCode = document.getElementById('unitSelect').value;
+      
+      if (!unitCode) {
+        alert('Please select a unit');
+        return;
+      }
+      
+      try {
+        let response = await fetch('http://localhost:3000/api/student/enroll', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ regNumber: currentStudentReg, unitCode })
+        });
+        
+        let data = await response.json();
+        
+        if (data.success) {
+          alert(`Enrolled in ${unitCode}`);
+          await loadEnrolledUnits();
+        } else {
+          alert(data.message);
+        }
+      } catch (e) {
+        alert('Error enrolling in unit');
+      }
+    });
+
+    async function checkFaceRegistration() {
+      try {
+        let response = await fetch('http://localhost:3000/faces-list');
+        let faces = await response.json();
+        let faceRegistered = faces.some(f => f.name === currentStudentName);
+        
+        if (!faceRegistered) {
+          infoFaceStatus.innerText = 'pending';
+          infoFaceStatus.className = 'face-status pending';
+          document.getElementById('pendingMessage').style.display = 'block';
+          document.getElementById('attendanceTable').style.display = 'none';
+        } else {
+          infoFaceStatus.innerText = 'registered';
+          infoFaceStatus.className = 'face-status registered';
+          document.getElementById('pendingMessage').style.display = 'none';
+        }
+        
+        return faceRegistered;
+      } catch (e) {
+        console.log('error checking face', e);
+        return false;
+      }
+    }
+
+    async function loadAttendance() {
+      let unitCode = document.getElementById('attendanceUnitSelect').value;
+      
+      if (!unitCode) {
+        document.getElementById('attendanceTable').style.display = 'none';
+        unitPercentageDisplay.innerText = '0%';
+        return;
+      }
+      
+      try {
+        let unitAttendance = JSON.parse(localStorage.getItem('unitAttendance')) || {};
+        let unitData = unitAttendance[unitCode] || {};
+        let studentWeeks = unitData[currentStudentName] || Array(14).fill(null);
+        let seenLog = JSON.parse(localStorage.getItem('seenLog')) || [];
+        
+        let present = studentWeeks.filter(w => w === true).length;
+        let percent = Math.round((present / 14) * 100);
+        
+        unitPercentageDisplay.innerText = percent + '%';
+        
+        let tableHtml = '';
+        for (let week = 1; week <= 14; week++) {
+          let status = studentWeeks[week-1];
+          let statusText = '<span class="not-marked">Not marked</span>';
+          let dateText = '—';
+          
+          if (status === true) {
+            statusText = '<span class="present">Present</span>';
+            let lastSeen = seenLog.filter(e => e.name === currentStudentName).pop();
+            if (lastSeen) {
+              let d = new Date(lastSeen.full);
+              dateText = d.toLocaleDateString();
+            }
+          } else if (status === false) {
+            statusText = '<span class="absent">Absent</span>';
+          }
+          
+          tableHtml += `<tr><td>Week ${week}</td><td>${statusText}</td><td>${dateText}</td></tr>`;
+        }
+        
+        document.getElementById('attendanceBody').innerHTML = tableHtml;
+        document.getElementById('attendanceTable').style.display = 'table';
+        
+      } catch (e) {
+        console.log('error loading attendance', e);
+      }
+    }
+
+    document.getElementById('attendanceUnitSelect').addEventListener('change', loadAttendance);
+  </script>
+</body>
+</html>

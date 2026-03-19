@@ -1,0 +1,152 @@
+vvv<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Registration</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #0b1c2c;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #e0edf5;
+    }
+    
+    .top-bar {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0a1a28;
+      border-bottom: 1px solid #1e3347;
+    }
+    
+    .logo-area {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .logo-area span {
+      font-size: 0.85rem;
+      color: #80b0d0;
+      margin-left: 0.75rem;
+      font-weight: 400;
+    }
+    
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    .register-card {
+      background: #112436;
+      border-radius: 24px;
+      padding: 2.5rem;
+      width: 450px;
+      border: 2px solid #f39c12;
+    }
+    
+    h2 {
+      color: #f39c12;
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      color: #adc9ed;
+      margin-bottom: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #adc9ed;
+    }
+    
+    input {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      background: #1f3852;
+      border: 1px solid #f39c12;
+      border-radius: 14px;
+      color: white;
+      font-size: 1rem;
+    }
+    
+    .btn-register {
+      width: 100%;
+      padding: 1rem;
+      background: #f39c12;
+      color: black;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 1rem 0;
+    }
+    
+    .back-link {
+      text-align: center;
+      color: #8fb4db;
+    }
+    
+    .back-link a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    
+    .footer-note {
+      text-align: center;
+      color: #2a5272;
+      padding: 1rem;
+      font-size: 0.85rem;
+      border-top: 1px solid #1e3347;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="logo-area">
+      Teachers Website
+      <span>registration</span>
+    </div>
+  </div>
+  
+  <div class="main-container">
+    <div class="register-card">
+      <h2>📝 Student Registration</h2>
+      <p>Please see your teacher to register. Face registration must be done with the teacher's camera system.</p>
+      
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="enter your full name" disabled>
+      </div>
+      
+      <button class="btn-register" disabled>Request Registration</button>
+      
+      <div class="back-link">
+        <a href="login.html">← back to login</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-note">
+    teachers website · student registration · spring 2025
+  </div>
+</body>
+</html>

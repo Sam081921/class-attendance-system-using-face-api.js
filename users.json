@@ -1,0 +1,32 @@
+{
+  "teachers": [
+    {
+      "id": "admin",
+      "password": "admin123",
+      "name": "Admin Teacher"
+    }
+  ],
+  "students": [
+    {
+      "name": "Samuel mwai",
+      "regNumber": "sc200/0459/2022",
+      "password": "sam123",
+      "registered": "2024-01-01T00:00:00.000Z",
+      "status": "pending",
+      "faceRegistered": false,
+      "enrolledUnits": []
+    },
+    {
+      "name": "caro",
+      "regNumber": "caro",
+      "password": "caro",
+      "registered": "2026-03-19T08:59:39.972Z",
+      "status": "active",
+      "faceRegistered": true,
+      "enrolledUnits": [
+        "CS801",
+        "CS701"
+      ]
+    }
+  ]
+}

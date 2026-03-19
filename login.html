@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MURANGA UNIVERSITY · login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f7f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #1e3a2e;
+        }
+
+        /* top navigation - matching teacher/student portal */
+        .top-nav {
+            background: #1b4d2e;
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d4a017;
+            color: white;
+        }
+
+        .logo-area {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-area span {
+            background: #d4a017;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: #1b4d2e;
+            font-weight: 600;
+        }
+
+        .live-clock {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            background: rgba(0,0,0,0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+        }
+
+        /* main container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* login card */
+        .login-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            width: 400px;
+            border: 1px solid #c0d6c0;
+            box-shadow: 0 2px 8px rgba(0,60,0,0.05);
+        }
+
+        .card-header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #d4a017;
+            padding-bottom: 1rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #1b4d2e;
+        }
+
+        .card-header .subtitle {
+            color: #4a6f5a;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* tabs */
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: #f0f7f0;
+            padding: 0.25rem;
+            border-radius: 40px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: none;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: #4a6f5a;
+            transition: all 0.1s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #1b4d2e;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* forms */
+        .login-form {
+            display: none;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #1b4d2e;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 0.7rem;
+            background: white;
+            border: 1px solid #c0d6c0;
+            border-radius: 4px;
+            color: #1b4d2e;
+            font-size: 0.95rem;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: #1b4d2e;
+        }
+
+        .login-input::placeholder {
+            color: #7a9e7a;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.7rem;
+            background: #1b4d2e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .login-btn:hover {
+            background: #2d6a3a;
+        }
+
+        .login-error {
+            color: #b33c1f;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #4a6f5a;
+            font-size: 0.9rem;
+        }
+
+        .register-link span {
+            color: #1b4d2e;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .register-link span:hover {
+            color: #d4a017;
+        }
+
+        /* footer */
+        .footer-note {
+            text-align: center;
+            color: #4a6f5a;
+            padding: 1rem;
+            font-size: 0.85rem;
+            border-top: 1px solid #c0d6c0;
+            background: white;
+        }
+
+        marquee {
+            color: #d4a017;
+            padding: 0.5rem;
+            background: #f0f7f0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #c0d6c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="logo-area">
+            MURANGA UNIVERSITY · MUT
+            <span>attendance system</span>
+        </div>
+        <div class="live-clock" id="clock"></div>
+    </div>
+
+    <marquee> FACE ATTENDANCE SYSTEM · STUDENTS REGISTER WITH REGISTRATION NUMBER · TEACHERS USE ADMIN CREDENTIALS </marquee>
+
+    <div class="main-container">
+        <div class="login-card">
+            <div class="card-header">
+                <h2>sign in</h2>
+                <div class="subtitle">access your portal</div>
+            </div>
+
+            <div class="tab-buttons">
+                <button class="tab-btn active" id="studentTab">student</button>
+                <button class="tab-btn" id="teacherTab">teacher</button>
+            </div>
+
+            <!-- STUDENT LOGIN FORM -->
+            <div class="login-form active" id="studentForm">
+                <div class="input-group">
+                    <label>registration number</label>
+                    <input type="text" class="login-input" id="studentRegNumber" placeholder="e.g. 2024001">
+                </div>
+                
+                <div class="input-group">
+                    <label>password</label>
+                    <input type="password" class="login-input" id="studentPass" placeholder="••••••••">
+                </div>
+                
+                <button class="login-btn" id="studentLoginBtn">sign in as student</button>
+                <div class="login-error" id="studentError">invalid registration number or password</div>
+                
+                <div class="register-link">
+                    new student? <span id="showRegister">register here</span>
+                </div>
+            </div>
+
+            <!-- TEACHER LOGIN FORM -->
+            <div class="login-form" id="teacherForm">
+                <div class="input-group">
+                    <label>teacher id</label>
+                    <input type="text" class="login-input" id="teacherId" placeholder="enter your ID" value="admin">
+                </div>
+                
+                <div class="input-group">
+                    <label>password</label>
+                    <input type="password" class="login-input" id="teacherPass" placeholder="••••••••" value="admin123">
+                </div>
+                
+                <button class="login-btn" id="teacherLoginBtn">sign in as teacher</button>
+                <div class="login-error" id="teacherError">invalid teacher id or password</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        muranga university of technology · face attendance system · 2025
+    </div>
+
+    <script>
+        // Clock update
+        function tickClock() {
+            let d = new Date();
+            let h = String(d.getHours()).padStart(2, '0');
+            let m = String(d.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').innerText = h + ':' + m;
+        }
+        tickClock();
+        setInterval(tickClock, 1000);
+
+        // ==================== TAB SWITCHING ====================
+        const studentTab = document.getElementById('studentTab');
+        const teacherTab = document.getElementById('teacherTab');
+        const studentForm = document.getElementById('studentForm');
+        const teacherForm = document.getElementById('teacherForm');
+
+        studentTab.addEventListener('click', () => {
+            studentTab.classList.add('active');
+            teacherTab.classList.remove('active');
+            studentForm.classList.add('active');
+            teacherForm.classList.remove('active');
+        });
+
+        teacherTab.addEventListener('click', () => {
+            teacherTab.classList.add('active');
+            studentTab.classList.remove('active');
+            teacherForm.classList.add('active');
+            studentForm.classList.remove('active');
+        });
+
+        // ==================== TEACHER LOGIN ====================
+        const teacherLoginBtn = document.getElementById('teacherLoginBtn');
+        const teacherId = document.getElementById('teacherId');
+        const teacherPass = document.getElementById('teacherPass');
+        const teacherError = document.getElementById('teacherError');
+
+        function doTeacherLogin() {
+            let id = teacherId.value.trim();
+            let pass = teacherPass.value.trim();
+
+            if (id === 'admin' && pass === 'admin123') {
+                sessionStorage.setItem('teacherLoggedIn', 'true');
+                sessionStorage.setItem('teacherName', 'Admin');
+                window.location.href = 'teachers.html';
+            } else {
+                teacherError.style.display = 'block';
+            }
+        }
+
+        teacherLoginBtn.onclick = doTeacherLogin;
+        teacherPass.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') doTeacherLogin();
+        });
+
+        // ==================== STUDENT LOGIN ====================
+        const studentLoginBtn = document.getElementById('studentLoginBtn');
+        const studentRegNumber = document.getElementById('studentRegNumber');
+        const studentPass = document.getElementById('studentPass');
+        const studentError = document.getElementById('studentError');
+
+        async function doStudentLogin() {
+            let regNum = studentRegNumber.value.trim();
+            let pass = studentPass.value.trim();
+
+            studentError.style.display = 'none';
+
+            if (!regNum || !pass) {
+                studentError.innerText = 'please enter registration number and password';
+                studentError.style.display = 'block';
+                return;
+            }
+
+            try {
+                let response = await fetch('http://localhost:3000/api/student/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ regNumber: regNum, password: pass })
+                });
+
+                let data = await response.json();
+
+                if (data.success) {
+                    sessionStorage.setItem('studentLoggedIn', 'true');
+                    sessionStorage.setItem('studentName', data.name);
+                    sessionStorage.setItem('studentRegNumber', data.regNumber);
+                    window.location.href = 'student.html';
+                } else {
+                    studentError.innerText = data.message || 'invalid credentials';
+                    studentError.style.display = 'block';
+                }
+            } catch (err) {
+                studentError.innerText = 'error connecting to server';
+                studentError.style.display = 'block';
+            }
+        }
+
+        studentLoginBtn.onclick = doStudentLogin;
+        studentPass.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') doStudentLogin();
+        });
+
+        // ==================== REGISTRATION LINK ====================
+        document.getElementById('showRegister').addEventListener('click', () => {
+            window.location.href = 'student.html?register=true';
+        });
+
+        // ==================== SESSION CHECK ====================
+        if (sessionStorage.getItem('teacherLoggedIn') === 'true') {
+            window.location.href = 'teachers.html';
+        }
+        if (sessionStorage.getItem('studentLoggedIn') === 'true') {
+            window.location.href = 'student.html';
+        }
+    </script>
+</body>
+</html>

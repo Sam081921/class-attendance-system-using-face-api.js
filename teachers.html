@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>teacher's portal · muranga university</title>
+  <script src="face-api.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f0f7f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1e3a2e;
+    }
+
+    .top-nav {
+      background: #1b4d2e;
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #d4a017;
+      color: white;
+    }
+
+    .logo-area {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: white;
+    }
+
+    .teacher-info {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .teacher-name {
+      color: white;
+      font-weight: 400;
+      font-size: 0.95rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+    }
+
+    .logout-btn {
+      background: #d4a017;
+      color: #1b4d2e;
+      border: none;
+      border-radius: 4px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background: #e5b32e;
+    }
+
+    .live-clock {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+      background: rgba(0,0,0,0.2);
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+    }
+
+    .main-layout {
+      display: flex;
+      flex: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.5rem;
+      gap: 2rem;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: white;
+      border-radius: 8px;
+      padding: 1rem 0;
+      border: 1px solid #c0d6c0;
+      height: fit-content;
+    }
+
+    .sidebar-item {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      color: #2d5a3a;
+      font-size: 0.95rem;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-item:hover {
+      background: #e8f3e8;
+    }
+
+    .sidebar-item.active {
+      background: #e0f0e0;
+      border-left: 3px solid #d4a017;
+      font-weight: 500;
+    }
+
+    .content-area {
+      flex: 1;
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      border: 1px solid #c0d6c0;
+      min-height: 600px;
+    }
+
+    .content-panel {
+      display: none;
+    }
+
+    .content-panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #d4a017;
+      padding-bottom: 0.75rem;
+    }
+
+    .panel-header h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #1b4d2e;
+    }
+
+    .unit-selector-bar {
+      background: #f0f7f0;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #c0d6c0;
+      flex-wrap: wrap;
+    }
+
+    .unit-selector-bar label {
+      color: #1b4d2e;
+      font-weight: 500;
+    }
+
+    #globalUnitSelect {
+      background: white;
+      color: #1b4d2e;
+      padding: 0.5rem 2rem 0.5rem 1rem;
+      border: 1px solid #1b4d2e;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      min-width: 300px;
+    }
+
+    #unitStats {
+      color: #1b4d2e;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-card {
+      background: #f5faf5;
+      padding: 1.2rem;
+      border-radius: 8px;
+      border: 1px solid #c0d6c0;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #4a6f5a;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1b4d2e;
+    }
+
+    .student-dropdown {
+      width: 100%;
+      padding: 0.7rem;
+      background: white;
+      color: #1b4d2e;
+      border: 1px solid #d4a017;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .pending-section {
+      background: #fef9e7;
+      padding: 1.2rem;
+      border-radius: 8px;
+      border: 1px solid #d4a017;
+      margin-bottom: 1.5rem;
+    }
+
+    .pending-title {
+      color: #d4a017;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+
+    .pending-item {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0e0b0;
+      color: #1b4d2e;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #1a2e1a;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      border: 2px solid #d4a017;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .week-picker {
+      background: #f0f7f0;
+      padding: 0.8rem 1.2rem;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #c0d6c0;
+      flex-wrap: wrap;
+    }
+
+    .week-picker label {
+      color: #1b4d2e;
+      font-weight: 500;
+    }
+
+    .week-picker select {
+      background: white;
+      color: #1b4d2e;
+      padding: 0.4rem 1.5rem 0.4rem 0.8rem;
+      border: 1px solid #1b4d2e;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #1b4d2e;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2d6a3a;
+    }
+
+    .btn-secondary {
+      background: #d4a017;
+      color: #1b4d2e;
+    }
+
+    .btn-secondary:hover {
+      background: #e5b32e;
+    }
+
+    .btn-danger {
+      background: #b33c1f;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #cc4a2b;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .reg-form {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .reg-form input {
+      flex: 2;
+      padding: 0.7rem 1rem;
+      background: white;
+      border: 1px solid #d4a017;
+      border-radius: 8px;
+      color: #1b4d2e;
+      font-size: 0.95rem;
+    }
+
+    .photo-progress {
+      margin-top: 1rem;
+      padding: 0.8rem;
+      background: #f0f7f0;
+      border-radius: 40px;
+      color: #d4a017;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+      border: 1px solid #d4a017;
+    }
+
+    .log-box {
+      background: #f5faf5;
+      border-radius: 8px;
+      padding: 1.2rem;
+      border: 1px solid #c0d6c0;
+      margin: 1.5rem 0;
+    }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      color: #1b4d2e;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #c0d6c0;
+    }
+
+    .log-list {
+      list-style: none;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .log-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #d0e0d0;
+      color: #1b4d2e;
+      font-size: 0.9rem;
+    }
+
+    .log-name {
+      color: #1b4d2e;
+      font-weight: 500;
+    }
+
+    .log-time {
+      color: #4a6f5a;
+      font-size: 0.8rem;
+    }
+
+    .clear-log-btn {
+      background: none;
+      border: 1px solid #b33c1f;
+      color: #b33c1f;
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .attendance-table th {
+      text-align: left;
+      padding: 0.8rem 0.5rem;
+      color: #1b4d2e;
+      font-weight: 500;
+      border-bottom: 2px solid #d4a017;
+    }
+
+    .attendance-table td {
+      padding: 0.8rem 0.5rem;
+      border-bottom: 1px solid #d0e0d0;
+    }
+
+    .present-tag {
+      color: #1b4d2e;
+      font-weight: 600;
+    }
+
+    .absent-tag {
+      color: #b33c1f;
+      font-weight: 600;
+    }
+
+    .not-marked-tag {
+      color: #7a9e7a;
+    }
+
+    .status-large {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #1b4d2e;
+      margin-bottom: 0.25rem;
+    }
+
+    .status-small {
+      color: #4a6f5a;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .verified-large {
+      color: #1b4d2e;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: none;
+      background: #d4a017;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <div class="logo-area">
+      MURANGA UNIVERSITY
+    </div>
+    <div class="teacher-info">
+      <span class="teacher-name" id="teacherName">admin</span>
+      <button class="logout-btn" id="logoutBtn">sign out</button>
+    </div>
+    <div class="live-clock" id="clock"></div>
+  </div>
+
+  <div class="main-layout" id="dashboard">
+    <div class="sidebar">
+      <div class="sidebar-item active" id="sidebarDashboard">Dashboard</div>
+      <div class="sidebar-item" id="sidebarScan">Scan</div>
+      <div class="sidebar-item" id="sidebarRegister">Register</div>
+      <div class="sidebar-item" id="sidebarAttendance">Attendance</div>
+    </div>
+
+    <div class="content-area">
+      <!-- Dashboard Panel -->
+      <div class="content-panel active" id="panelDashboard">
+        <div class="panel-header">
+          <h2>Dashboard</h2>
+        </div>
+
+        <div class="unit-selector-bar">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <label>unit:</label>
+            <select id="globalUnitSelect">
+              <option value="">select unit</option>
+              <option value="CS101">CS101 - Programming</option>
+              <option value="CS201">CS201 - Data Structures</option>
+              <option value="CS301">CS301 - Databases</option>
+              <option value="CS401">CS401 - Web Dev</option>
+              <option value="CS501">CS501 - AI</option>
+              <option value="CS601">CS601 - Networks</option>
+              <option value="CS701">CS701 - Software Eng</option>
+              <option value="CS801">CS801 - Security</option>
+            </select>
+          </div>
+          <div id="unitStats">
+            <span id="unitStudentCount">0</span> enrolled
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">total</div>
+            <div class="stat-value" id="totalStudents">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">registered</div>
+            <div class="stat-value" id="faceRegistered">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">pending</div>
+            <div class="stat-value" id="pendingCount">0</div>
+          </div>
+        </div>
+
+        <div class="pending-section">
+          <div class="pending-title">pending registration</div>
+          <div id="pendingList">loading...</div>
+        </div>
+      </div>
+
+      <!-- Scan Panel -->
+      <div class="content-panel" id="panelScan">
+        <div class="panel-header">
+          <h2>Scan</h2>
+        </div>
+
+        <div class="unit-selector-bar" style="margin-bottom: 1rem;">
+          <label>mark for:</label>
+          <span id="scanUnitDisplay" style="font-weight: 500;">select unit above</span>
+        </div>
+
+        <div class="week-picker">
+          <label>week</label>
+          <select id="scanWeek">
+            <option value="1">week 1</option>
+            <option value="2">week 2</option>
+            <option value="3">week 3</option>
+            <option value="4">week 4</option>
+            <option value="5">week 5</option>
+            <option value="6">week 6</option>
+            <option value="7">week 7</option>
+            <option value="8">week 8</option>
+            <option value="9">week 9</option>
+            <option value="10">week 10</option>
+            <option value="11">week 11</option>
+            <option value="12">week 12</option>
+            <option value="13">week 13</option>
+            <option value="14">week 14</option>
+          </select>
+        </div>
+
+        <div class="video-wrap" id="scanVideoWrap">
+          <video id="scanVideo" playsinline></video>
+        </div>
+
+        <div class="status-large" id="scanStatus">looking for face...</div>
+        <div class="status-small" id="scanHelp">good lighting helps</div>
+        <div class="verified-large" id="scanVerified" style="display: none;">recognized</div>
+
+        <div class="log-box">
+          <div class="log-header">
+            <span>today's scans</span>
+            <button class="clear-log-btn" id="clearLog">clear</button>
+          </div>
+          <ul class="log-list" id="logContainer">
+            <li class="log-item">— none —</li>
+          </ul>
+        </div>
+
+        <div class="button-row">
+          <button class="btn btn-primary" id="startScan">start</button>
+          <button class="btn btn-danger" id="stopScan" disabled>stop</button>
+          <button class="btn btn-secondary" id="reloadFaces">reload</button>
+        </div>
+      </div>
+
+      <!-- Register Panel -->
+      <div class="content-panel" id="panelRegister">
+        <div class="panel-header">
+          <h2>Register</h2>
+        </div>
+
+        <select id="studentDropdown" class="student-dropdown">
+          <option value="">select student</option>
+        </select>
+
+        <div class="video-wrap">
+          <video id="registerVideo" autoplay playsinline></video>
+          <canvas id="registerCanvas"></canvas>
+        </div>
+
+        <div class="reg-form">
+          <input type="text" id="studentName" placeholder="student name" value="">
+          <button class="btn btn-secondary" id="takePhoto">take photo</button>
+        </div>
+
+        <div class="photo-progress" id="photoProgress">
+          photo <span id="photoCount">1</span>/3
+        </div>
+      </div>
+
+      <!-- Attendance Panel -->
+      <div class="content-panel" id="panelAttendance">
+        <div class="panel-header">
+          <h2>Attendance</h2>
+        </div>
+
+        <div class="unit-selector-bar" style="margin-bottom: 1rem;">
+          <label>viewing:</label>
+          <span id="attendanceUnitDisplay" style="font-weight: 500;">select unit above</span>
+        </div>
+
+        <div class="week-picker">
+          <label>week</label>
+          <select id="viewWeek">
+            <option value="1">week 1</option>
+            <option value="2">week 2</option>
+            <option value="3">week 3</option>
+            <option value="4">week 4</option>
+            <option value="5">week 5</option>
+            <option value="6">week 6</option>
+            <option value="7">week 7</option>
+            <option value="8">week 8</option>
+            <option value="9">week 9</option>
+            <option value="10">week 10</option>
+            <option value="11">week 11</option>
+            <option value="12">week 12</option>
+            <option value="13">week 13</option>
+            <option value="14">week 14</option>
+          </select>
+        </div>
+
+        <div class="stats-grid" style="grid-template-columns: repeat(4,1fr);">
+          <div class="stat-card">
+            <div class="stat-label">enrolled</div>
+            <div class="stat-value" id="enrolledCount">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">present</div>
+            <div class="stat-value" id="presentStat">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">absent</div>
+            <div class="stat-value" id="absentStat">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">not marked</div>
+            <div class="stat-value" id="notMarkedStat">0</div>
+          </div>
+        </div>
+
+        <table class="attendance-table">
+          <thead>
+            <tr>
+              <th>reg</th>
+              <th>name</th>
+              <th>face</th>
+              <th>status</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTable">
+            <tr><td colspan="4">select unit</td></tr>
+          </tbody>
+        </table>
+
+        <div class="button-row">
+          <button class="btn btn-primary" id="markAllPresent">mark all present</button>
+          <button class="btn btn-secondary" id="exportCSV">export csv</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simple delete button (text only) -->
+  <div style="position: fixed; bottom: 20px; right: 20px;">
+    <button onclick="deleteAllStudents()" style="background: #b33c1f; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">delete all students</button>
+  </div>
+
+  <script>
+    // ==================== SESSION CHECK ====================
+    if (sessionStorage.getItem('teacherLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+
+    document.getElementById('logoutBtn').onclick = () => {
+      sessionStorage.removeItem('teacherLoggedIn');
+      window.location.href = 'login.html';
+    };
+
+    document.getElementById('teacherName').innerText = sessionStorage.getItem('teacherName') || 'admin';
+
+    function tickClock() {
+      let d = new Date();
+      let h = String(d.getHours()).padStart(2,'0');
+      let m = String(d.getMinutes()).padStart(2,'0');
+      document.getElementById('clock').innerText = h + ':' + m;
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
+
+    // ==================== SIDEBAR NAVIGATION ====================
+    const sidebarDashboard = document.getElementById('sidebarDashboard');
+    const sidebarScan = document.getElementById('sidebarScan');
+    const sidebarRegister = document.getElementById('sidebarRegister');
+    const sidebarAttendance = document.getElementById('sidebarAttendance');
+    
+    const panelDashboard = document.getElementById('panelDashboard');
+    const panelScan = document.getElementById('panelScan');
+    const panelRegister = document.getElementById('panelRegister');
+    const panelAttendance = document.getElementById('panelAttendance');
+
+    function showPanel(panel) {
+      sidebarDashboard.classList.remove('active');
+      sidebarScan.classList.remove('active');
+      sidebarRegister.classList.remove('active');
+      sidebarAttendance.classList.remove('active');
+      panelDashboard.classList.remove('active');
+      panelScan.classList.remove('active');
+      panelRegister.classList.remove('active');
+      panelAttendance.classList.remove('active');
+      
+      if (panel === 'dashboard') {
+        sidebarDashboard.classList.add('active');
+        panelDashboard.classList.add('active');
+      } else if (panel === 'scan') {
+        sidebarScan.classList.add('active');
+        panelScan.classList.add('active');
+        if (globalUnitSelect.value) loadUnitStudents(globalUnitSelect.value);
+      } else if (panel === 'register') {
+        sidebarRegister.classList.add('active');
+        panelRegister.classList.add('active');
+        setTimeout(() => startRegisterCam(), 150);
+      } else if (panel === 'attendance') {
+        sidebarAttendance.classList.add('active');
+        panelAttendance.classList.add('active');
+        if (globalUnitSelect.value) loadAttendanceView();
+      }
+    }
+
+    sidebarDashboard.addEventListener('click', () => showPanel('dashboard'));
+    sidebarScan.addEventListener('click', () => showPanel('scan'));
+    sidebarRegister.addEventListener('click', () => showPanel('register'));
+    sidebarAttendance.addEventListener('click', () => showPanel('attendance'));
+
+    // ==================== GLOBAL UNIT SELECTOR ====================
+    const globalUnitSelect = document.getElementById('globalUnitSelect');
+    const unitStudentCount = document.getElementById('unitStudentCount');
+    const scanUnitDisplay = document.getElementById('scanUnitDisplay');
+    const attendanceUnitDisplay = document.getElementById('attendanceUnitDisplay');
+    
+    let currentUnitStudents = [];
+
+    async function loadUnitStudents(unitCode) {
+      if (!unitCode) {
+        currentUnitStudents = [];
+        unitStudentCount.innerText = '0';
+        scanUnitDisplay.innerText = 'select unit above';
+        attendanceUnitDisplay.innerText = 'select unit above';
+        updateStudentDropdown();
+        updatePendingList();
+        updateDashboardStats();
+        return;
+      }
+      
+      try {
+        let response = await fetch(`http://localhost:3000/api/unit/students/${unitCode}`);
+        let students = await response.json();
+        currentUnitStudents = students;
+        unitStudentCount.innerText = students.length;
+        
+        scanUnitDisplay.innerText = unitCode;
+        attendanceUnitDisplay.innerText = unitCode;
+        
+        updateStudentDropdown();
+        updatePendingList();
+        updateDashboardStats();
+        
+        if (panelAttendance.classList.contains('active')) {
+          loadAttendanceView();
+        }
+        
+      } catch (e) {
+        console.log('error loading students', e);
+      }
+    }
+
+    function updateDashboardStats() {
+      let total = currentUnitStudents.length;
+      let registered = currentUnitStudents.filter(s => s.faceRegistered).length;
+      let pending = total - registered;
+      
+      document.getElementById('totalStudents').innerText = total;
+      document.getElementById('faceRegistered').innerText = registered;
+      document.getElementById('pendingCount').innerText = pending;
+    }
+
+    function updatePendingList() {
+      let pendingDiv = document.getElementById('pendingList');
+      
+      let pendingStudents = currentUnitStudents.filter(s => !s.faceRegistered);
+      
+      let html = '';
+      if (pendingStudents.length === 0) {
+        html = '<div>none pending</div>';
+      } else {
+        pendingStudents.forEach(s => {
+          html += `<div class="pending-item">${s.name} (${s.regNumber})</div>`;
+        });
+      }
+      
+      if (pendingDiv) pendingDiv.innerHTML = html;
+    }
+
+    function updateStudentDropdown() {
+      let dropdown = document.getElementById('studentDropdown');
+      if (!dropdown) return;
+      
+      let options = '<option value="">select student</option>';
+      
+      currentUnitStudents.forEach(s => {
+        let faceStatus = s.faceRegistered ? 'registered' : 'pending';
+        options += `<option value="${s.name}" data-reg="${s.regNumber}">${faceStatus} ${s.name} (${s.regNumber})</option>`;
+      });
+      
+      dropdown.innerHTML = options;
+    }
+
+    globalUnitSelect.addEventListener('change', async function() {
+      await loadUnitStudents(this.value);
+    });
+
+    document.getElementById('studentDropdown')?.addEventListener('change', function(e) {
+      let selectedName = e.target.value;
+      if (selectedName) {
+        document.getElementById('studentName').value = selectedName;
+      }
+    });
+
+    // ==================== ATTENDANCE VIEW ====================
+    async function loadAttendanceView() {
+      let unitCode = globalUnitSelect.value;
+      let weekIdx = parseInt(document.getElementById('viewWeek').value) - 1;
+      
+      if (!unitCode) {
+        document.getElementById('attendanceTable').innerHTML = '<tr><td colspan="4">select unit</td></tr>';
+        return;
+      }
+      
+      let unitAttendance = JSON.parse(localStorage.getItem('unitAttendance')) || {};
+      
+      if (!unitAttendance[unitCode]) {
+        unitAttendance[unitCode] = {};
+      }
+      
+      let present = 0, absent = 0, notMarked = 0;
+      let tableHtml = '';
+      
+      currentUnitStudents.forEach(s => {
+        let studentAttendance = unitAttendance[unitCode][s.name] || Array(14).fill(null);
+        let val = studentAttendance[weekIdx];
+        
+        if (val === true) present++;
+        else if (val === false) absent++;
+        else notMarked++;
+        
+        let statusHtml = '<span class="not-marked-tag">not marked</span>';
+        if (val === true) statusHtml = '<span class="present-tag">present</span>';
+        if (val === false) statusHtml = '<span class="absent-tag">absent</span>';
+        
+        let faceStatus = s.faceRegistered ? 'registered' : 'pending';
+        
+        tableHtml += `<tr>
+          <td>${s.regNumber}</td>
+          <td>${s.name}</td>
+          <td>${faceStatus}</td>
+          <td>${statusHtml}</td>
+        </tr>`;
+      });
+      
+      document.getElementById('attendanceTable').innerHTML = tableHtml;
+      document.getElementById('enrolledCount').innerText = currentUnitStudents.length;
+      document.getElementById('presentStat').innerText = present;
+      document.getElementById('absentStat').innerText = absent;
+      document.getElementById('notMarkedStat').innerText = notMarked;
+    }
+
+    document.getElementById('viewWeek').addEventListener('change', loadAttendanceView);
+
+    document.getElementById('markAllPresent').onclick = () => {
+      let unitCode = globalUnitSelect.value;
+      let weekIdx = parseInt(document.getElementById('viewWeek').value) - 1;
+      
+      if (!unitCode) {
+        alert('select unit first');
+        return;
+      }
+      
+      let unitAttendance = JSON.parse(localStorage.getItem('unitAttendance')) || {};
+      
+      if (!unitAttendance[unitCode]) {
+        unitAttendance[unitCode] = {};
+      }
+      
+      currentUnitStudents.forEach(s => {
+        if (!unitAttendance[unitCode][s.name]) {
+          unitAttendance[unitCode][s.name] = Array(14).fill(null);
+        }
+        unitAttendance[unitCode][s.name][weekIdx] = true;
+      });
+      
+      localStorage.setItem('unitAttendance', JSON.stringify(unitAttendance));
+      loadAttendanceView();
+      alert('marked present');
+    };
+
+    document.getElementById('exportCSV').onclick = () => {
+      let unitCode = globalUnitSelect.value;
+      let week = document.getElementById('viewWeek').value;
+      
+      if (!unitCode) {
+        alert('select unit first');
+        return;
+      }
+      
+      let unitAttendance = JSON.parse(localStorage.getItem('unitAttendance')) || {};
+      let unitData = unitAttendance[unitCode] || {};
+      
+      let csv = 'Reg Number,Name,Face Status,Attendance Status\n';
+      
+      currentUnitStudents.forEach(s => {
+        let studentWeeks = unitData[s.name] || Array(14).fill(null);
+        let val = studentWeeks[week-1];
+        let statusText = val === true ? 'PRESENT' : val === false ? 'ABSENT' : 'NOT MARKED';
+        let faceStatus = s.faceRegistered ? 'REGISTERED' : 'PENDING';
+        csv += `${s.regNumber},${s.name},${faceStatus},${statusText}\n`;
+      });
+      
+      let blob = new Blob([csv], {type:'text/csv'});
+      let a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${unitCode}-week${week}.csv`;
+      a.click();
+    };
+
+    // ==================== SCAN CAMERA ====================
+    const scanVideo = document.getElementById('scanVideo');
+    const startScan = document.getElementById('startScan');
+    const stopScan = document.getElementById('stopScan');
+    const reloadFaces = document.getElementById('reloadFaces');
+    const scanStatus = document.getElementById('scanStatus');
+    const scanHelp = document.getElementById('scanHelp');
+    const scanVerified = document.getElementById('scanVerified');
+    const clearLog = document.getElementById('clearLog');
+    const logContainer = document.getElementById('logContainer');
+    
+    let scanInterval = null;
+    let overlayCanvas = null;
+    let faceMatcher = null;
+    let knownFaces = [];
+    let seenLog = JSON.parse(localStorage.getItem('seenLog')) || [];
+    let sessionSeen = new Set();
+    let modelsLoaded = false;
+
+    function saveSeenLog() {
+      localStorage.setItem('seenLog', JSON.stringify(seenLog));
+    }
+
+    function renderLog() {
+      if (seenLog.length === 0) {
+        logContainer.innerHTML = '<li class="log-item">— none —</li>';
+        return;
+      }
+      let html = '';
+      seenLog.slice().reverse().forEach(e => {
+        html += '<li class="log-item"><span class="log-name">' + e.name + '</span> <span class="log-time">' + e.time + '</span></li>';
+      });
+      logContainer.innerHTML = html;
+    }
+
+    clearLog.onclick = () => {
+      seenLog = [];
+      sessionSeen.clear();
+      saveSeenLog();
+      renderLog();
+    };
+
+    function markPresentForUnit(name) {
+      let unitCode = globalUnitSelect.value;
+      let weekIdx = parseInt(document.getElementById('scanWeek').value) - 1;
+      
+      if (!unitCode) {
+        console.log('no unit selected');
+        return false;
+      }
+      
+      let studentInUnit = currentUnitStudents.some(s => s.name === name);
+      if (!studentInUnit) {
+        console.log('student not in this unit');
+        return false;
+      }
+      
+      let unitAttendance = JSON.parse(localStorage.getItem('unitAttendance')) || {};
+      
+      if (!unitAttendance[unitCode]) {
+        unitAttendance[unitCode] = {};
+      }
+      
+      if (!unitAttendance[unitCode][name]) {
+        unitAttendance[unitCode][name] = Array(14).fill(null);
+      }
+      
+      unitAttendance[unitCode][name][weekIdx] = true;
+      localStorage.setItem('unitAttendance', JSON.stringify(unitAttendance));
+      
+      return true;
+    }
+
+    function addToSeenLog(name) {
+      if (sessionSeen.has(name)) return false;
+      
+      let now = new Date();
+      let timeStr = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+      
+      seenLog.push({ name, time: timeStr, full: now.toISOString() });
+      sessionSeen.add(name);
+      
+      markPresentForUnit(name);
+      
+      if (seenLog.length > 40) seenLog = seenLog.slice(-40);
+      saveSeenLog();
+      renderLog();
+      return true;
+    }
+
+    async function loadModelsAndFaces() {
+      try {
+        scanStatus.innerText = 'loading models...';
+        
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+          faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+          faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+        ]);
+        
+        modelsLoaded = true;
+        scanStatus.innerText = 'looking for face...';
+        
+        await loadKnownFaces();
+      } catch (error) {
+        console.error('error loading models:', error);
+        scanStatus.innerText = 'error loading models';
+      }
+    }
+
+    async function loadKnownFaces() {
+      try {
+        let r = await fetch('http://localhost:3000/faces-list');
+        let faces = await r.json();
+        knownFaces = [];
+        
+        for (let f of faces) {
+          let descs = [];
+          for (let url of f.images) {
+            try {
+              let img = await faceapi.fetchImage(url);
+              let det = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+                .withFaceLandmarks().withFaceDescriptor();
+              if (det) descs.push(det.descriptor);
+            } catch (e) {}
+          }
+          if (descs.length) {
+            knownFaces.push(new faceapi.LabeledFaceDescriptors(f.name, descs));
+          }
+        }
+        
+        if (knownFaces.length) {
+          faceMatcher = new faceapi.FaceMatcher(knownFaces, 0.5);
+          console.log('faces loaded:', knownFaces.length);
+        }
+      } catch (e) {
+        console.log('error loading faces', e);
+      }
+    }
+
+    async function startScanCam() {
+      try {
+        if (!modelsLoaded) {
+          await loadModelsAndFaces();
+        }
+        
+        let stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { width: 640, height: 480, facingMode: 'user' } 
+        });
+        
+        scanVideo.srcObject = stream;
+        
+        await new Promise((resolve) => {
+          scanVideo.onloadedmetadata = () => {
+            scanVideo.play();
+            resolve();
+          };
+        });
+        
+        if (overlayCanvas) overlayCanvas.remove();
+        
+        overlayCanvas = document.createElement('canvas');
+        overlayCanvas.style.position = 'absolute';
+        overlayCanvas.style.top = '0';
+        overlayCanvas.style.left = '0';
+        overlayCanvas.style.width = '100%';
+        overlayCanvas.style.height = '100%';
+        overlayCanvas.style.pointerEvents = 'none';
+        document.getElementById('scanVideoWrap').appendChild(overlayCanvas);
+        let ctx = overlayCanvas.getContext('2d');
+        
+        let display = { width: scanVideo.videoWidth, height: scanVideo.videoHeight };
+        overlayCanvas.width = display.width;
+        overlayCanvas.height = display.height;
+        
+        let opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 });
+        
+        if (scanInterval) clearInterval(scanInterval);
+        
+        let wasVerified = false;
+        
+        scanInterval = setInterval(async () => {
+          if (!scanVideo.srcObject || scanVideo.paused) return;
+          
+          try {
+            let detections = await faceapi.detectAllFaces(scanVideo, opts)
+              .withFaceLandmarks().withFaceDescriptors();
+            
+            let good = detections.filter(d => d.detection.box.width > 70 && d.detection.box.height > 70);
+            let resized = faceapi.resizeResults(good, display);
+            
+            ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            
+            if (good.length) {
+              faceapi.draw.drawDetections(overlayCanvas, resized);
+              faceapi.draw.drawFaceLandmarks(overlayCanvas, resized);
+              
+              if (faceMatcher) {
+                good.forEach((det, idx) => {
+                  let box = resized[idx].detection.box;
+                  let match = faceMatcher.findBestMatch(det.descriptor);
+                  
+                  ctx.fillStyle = 'rgba(0,40,0,0.7)';
+                  ctx.fillRect(box.x, box.y-35, box.width, 35);
+                  
+                  if (match.label !== 'unknown') {
+                    ctx.fillStyle = '#d4a017';
+                    ctx.font = 'bold 18px system-ui';
+                    ctx.fillText(match.label, box.x+10, box.y-12);
+                    
+                    ctx.fillStyle = 'white';
+                    ctx.font = '12px system-ui';
+                    let conf = Math.round((1 - match.distance) * 100);
+                    ctx.fillText(conf + '%', box.x + box.width - 50, box.y-12);
+                    
+                    addToSeenLog(match.label);
+                    
+                    if (!wasVerified) {
+                      wasVerified = true;
+                      scanStatus.style.display = 'none';
+                      scanHelp.style.display = 'none';
+                      scanVerified.style.display = 'inline-block';
+                    }
+                  } else {
+                    ctx.fillStyle = '#d4a017';
+                    ctx.font = 'bold 16px system-ui';
+                    ctx.fillText('visitor', box.x+10, box.y-12);
+                  }
+                });
+              }
+            } else {
+              if (wasVerified) {
+                wasVerified = false;
+                scanStatus.style.display = 'block';
+                scanHelp.style.display = 'block';
+                scanVerified.style.display = 'none';
+              }
+            }
+          } catch (err) {}
+        }, 300);
+        
+        startScan.disabled = true;
+        stopScan.disabled = false;
+      } catch (err) {
+        alert('camera failed');
+      }
+    }
+
+    function stopScanCam() {
+      if (scanVideo.srcObject) {
+        scanVideo.srcObject.getTracks().forEach(t => t.stop());
+        scanVideo.srcObject = null;
+      }
+      if (scanInterval) {
+        clearInterval(scanInterval);
+        scanInterval = null;
+      }
+      if (overlayCanvas) {
+        overlayCanvas.remove();
+        overlayCanvas = null;
+      }
+      startScan.disabled = false;
+      stopScan.disabled = true;
+      
+      scanStatus.style.display = 'block';
+      scanHelp.style.display = 'block';
+      scanVerified.style.display = 'none';
+      sessionSeen.clear();
+    }
+
+    startScan.onclick = startScanCam;
+    stopScan.onclick = stopScanCam;
+    reloadFaces.onclick = loadKnownFaces;
+
+    // ==================== REGISTER CAMERA ====================
+    const registerVideo = document.getElementById('registerVideo');
+    const registerCanvas = document.getElementById('registerCanvas');
+    const regCtx = registerCanvas.getContext('2d');
+    const studentName = document.getElementById('studentName');
+    const takePhoto = document.getElementById('takePhoto');
+    const photoProgress = document.getElementById('photoProgress');
+    const photoCountSpan = document.getElementById('photoCount');
+    
+    let registerInterval = null;
+    let photoCount = 0;
+    let currentRegName = '';
+    let isRegistering = false;
+
+    async function startRegisterCam() {
+      try {
+        if (registerVideo.srcObject) {
+          registerVideo.srcObject.getTracks().forEach(t => t.stop());
+        }
+        let stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
+        registerVideo.srcObject = stream;
+        await registerVideo.play();
+        startRegisterDetection();
+      } catch (e) {
+        console.log('register camera error', e);
+      }
+    }
+
+    async function startRegisterDetection() {
+      if (registerInterval) clearInterval(registerInterval);
+      
+      if (!faceapi.nets.tinyFaceDetector.isLoaded) {
+        await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+        await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
+      }
+      
+      let opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 });
+      
+      registerInterval = setInterval(async () => {
+        if (!registerVideo.srcObject || registerVideo.paused) return;
+        
+        if (registerCanvas.width !== registerVideo.videoWidth || registerCanvas.height !== registerVideo.videoHeight) {
+          registerCanvas.width = registerVideo.videoWidth;
+          registerCanvas.height = registerVideo.videoHeight;
+        }
+        
+        try {
+          let detections = await faceapi.detectAllFaces(registerVideo, opts).withFaceLandmarks();
+          regCtx.clearRect(0,0,registerCanvas.width,registerCanvas.height);
+          
+          if (detections.length) {
+            faceapi.draw.drawDetections(registerCanvas, detections);
+            faceapi.draw.drawFaceLandmarks(registerCanvas, detections);
+            
+            if (isRegistering) {
+              regCtx.strokeStyle = '#d4a017';
+              regCtx.lineWidth = 3;
+              regCtx.strokeRect(10,10,registerCanvas.width-20,registerCanvas.height-20);
+              regCtx.fillStyle = '#d4a017';
+              regCtx.font = 'bold 16px system-ui';
+              regCtx.fillText('adding ' + currentRegName, 20, 40);
+            }
+          }
+        } catch (err) {}
+      }, 200);
+    }
+
+    takePhoto.onclick = async () => {
+      let name = studentName.value.trim();
+      if (!name) {
+        alert('need a name');
+        return;
+      }
+      
+      if (!isRegistering) {
+        isRegistering = true;
+        currentRegName = name;
+        photoCount = 0;
+        photoProgress.style.display = 'block';
+        studentName.disabled = true;
+      }
+      
+      if (name !== currentRegName) {
+        alert('finish adding ' + currentRegName + ' first');
+        return;
+      }
+      
+      let snap = document.createElement('canvas');
+      snap.width = registerVideo.videoWidth;
+      snap.height = registerVideo.videoHeight;
+      snap.getContext('2d').drawImage(registerVideo, 0, 0);
+      let base64 = snap.toDataURL('image/jpeg');
+      
+      try {
+        let resp = await fetch('http://localhost:3000/save-face', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ name, imageData: base64 })
+        });
+        if (resp.ok) {
+          photoCount++;
+          photoCountSpan.innerText = photoCount;
+          
+          regCtx.fillStyle = 'rgba(212,160,23,0.2)';
+          regCtx.fillRect(0,0,registerCanvas.width,registerCanvas.height);
+          setTimeout(() => regCtx.clearRect(0,0,registerCanvas.width,registerCanvas.height), 150);
+          
+          if (photoCount >= 3) {
+            alert(name + ' added');
+            isRegistering = false;
+            photoProgress.style.display = 'none';
+            studentName.disabled = false;
+            studentName.value = '';
+            photoCount = 0;
+            if (globalUnitSelect.value) {
+              loadUnitStudents(globalUnitSelect.value);
+            }
+          }
+        }
+      } catch (err) {
+        alert('could not save');
+      }
+    };
+
+    // Initial load
+    renderLog();
+    loadUnitStudents('');
+    
+    setTimeout(() => {
+      if (!modelsLoaded) {
+        loadModelsAndFaces();
+      }
+    }, 1000);
+
+    // Delete all students function
+    window.deleteAllStudents = function() {
+      if (confirm('Delete ALL students? This cannot be undone!')) {
+        localStorage.removeItem('unitAttendance');
+        localStorage.removeItem('seenLog');
+        localStorage.removeItem('weekData');
+        alert('Local storage cleared. Now manually delete from users.json');
+      }
+    };
+  </script>
+</body>
+</html>
